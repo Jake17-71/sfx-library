@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+
+# Environment files
+.env*
+
+# IDE
+.vscode/
+.idea/
+*.code-workspace
+
+# Build output
+dist/
+build/
+
+# Logs
+*.log
+
+# Cache
+.cache/
+
+# Temporary files
+*.tmp
+*.DS_Store
+
+# Keep empty directories
+!**/.gitkeep

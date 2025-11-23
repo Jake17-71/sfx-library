@@ -1,0 +1,11 @@
+@use '../helpers' as *;
+
+.sounds {
+  display: flex;
+  flex-direction: column;
+  width: 70%;
+  height: 100%;
+  padding-bottom: 20px;
+  background-color: var(--bg);
+  border-radius: var(--border-radius-l);
+}

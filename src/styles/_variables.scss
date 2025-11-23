@@ -1,0 +1,62 @@
+@use 'helpers/index' as *;
+
+:root {
+  --bg-dark: oklch(16% 0.008 240deg);
+  --bg: oklch(23% 0.012 240deg);
+  --bg-light: oklch(28% 0.015 240deg);
+
+  --text: oklch(95% 0.005 240deg);
+  --text-muted: oklch(65% 0.01 240deg);
+
+  --highlight: oklch(45% 0.02 240deg);
+  --border-color: oklch(35% 0.015 240deg);
+  --border-muted: oklch(28% 0.012 240deg);
+
+  --primary-dark: oklch(40% 0.1 220deg);
+  --primary: oklch(50% 0.12 220deg);
+  --primary-light: oklch(60% 0.15 220deg);
+
+  --secondary: oklch(70% 0.15 85deg);
+  --danger: oklch(65% 0.18 25deg);
+  --warning: oklch(75% 0.16 75deg);
+  --success: oklch(65% 0.14 155deg);
+  --info: oklch(60% 0.14 250deg);
+
+  /* shadows */
+  --shadow-s:
+    inset 0 1px 2px #ffffff30, /* top highlight */ 0 1px 2px #00000030,
+      /* dark shadow */ 0 2px 4px #00000015; /* soft shadow */
+  --shadow-m:
+    inset 0 1px 2px #ffffff50, /* top highlight */ 0 2px 4px #00000030,
+      /* dark shadow */ 0 4px 8px #00000015; /* soft shadow */
+  --shadow-l:
+    inset 0 1px 2px #ffffff70, /* top highlight */ 0 4px 6px #00000030,
+      /* dark shadow */ 0 6px 10px #00000015; /* soft shadow */
+
+  --border: var(--border-width-m) solid var(--border-color);
+
+  --border-width-xl: 6px;
+  --border-width-l: 4px;
+  --border-width-m: 3px;
+  --border-width-xm: 2px;
+  --border-width-s: 1px;
+
+  --border-radius-l: 12px;
+  --border-radius-m: 10px;
+  --border-radius: 8px;
+  --border-radius-xs: 6px;
+  --border-radius-xxs: 5px;
+  --border-radius-xxxs: 4px;
+
+  --input-height: 44px;
+
+  --font-family-base: 'Rubik', sans-serif;
+
+  --container-width: #{fluid-to-laptop(
+      $container-desktop-width,
+      $container-laptop-width
+    )};
+  --container-padding-x: 16px;
+
+  --transition-duration: 0.2s;
+}

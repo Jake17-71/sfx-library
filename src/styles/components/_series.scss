@@ -1,0 +1,60 @@
+@use '../helpers' as *;
+
+.series {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 30%;
+  height: 100%;
+  padding-bottom: 12px;
+  background-color: var(--bg);
+  border-radius: var(--border-radius-l);
+
+  &__header-wrapper {
+    padding: 12px;
+    background-color: var(--primary);
+    border-radius: var(--border-radius-l);
+  }
+
+  &__item {
+    &-title {
+      position: relative;
+      width: 100%;
+      padding-left: 24px;
+      font-weight: 600;
+      color: var(--text);
+      cursor: pointer;
+      transition: color var(--transition-duration);
+
+      @include hover {
+        color: var(--primary-light);
+      }
+
+      &::before {
+        content: '>';
+        transition: transform var(--transition-duration);
+        transform: translateX(-18px);
+
+        @include abs-y;
+      }
+
+      &.is-active {
+        &::before {
+          transform: rotate(90deg) translateY(18px);
+        }
+      }
+    }
+
+    &-buttons {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      width: 100%;
+    }
+
+    &-title.is-active ~ &-buttons {
+      display: flex;
+    }
+  }
+}

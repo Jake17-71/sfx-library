@@ -1,0 +1,195 @@
+@use '../helpers' as *;
+
+.button {
+  padding: 0;
+  color: var(--text);
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  transition-duration: var(--transition-duration);
+
+  &:active {
+    transform: translateY(2px);
+  }
+
+  &--text {
+    padding: 6px;
+    font-weight: 600;
+    color: var(--primary);
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    transition-duration: var(--transition-duration);
+
+    @include hover {
+      color: var(--primary-dark);
+    }
+
+    &:active {
+      transform: translateY(2px);
+    }
+  }
+
+  &--play {
+    --button-size: 48px;
+
+    position: relative;
+    padding: 0;
+    color: var(--text);
+    background-color: var(--bg-dark);
+    border: none;
+    border-radius: 50%;
+    box-shadow: var(--shadow-m);
+    cursor: pointer;
+    transition-duration: var(--transition-duration);
+
+    @include square(var(--button-size));
+
+    @include hover {
+      color: var(--text-muted);
+      background-color: var(--bg-light);
+      box-shadow: var(--shadow-l);
+    }
+
+    &:active {
+      transform: translateY(2px);
+    }
+
+    &::after {
+      content: '▲';
+      font-size: calc(var(--button-size) / 2);
+      transform: rotate(90deg);
+
+      @include abs-center;
+    }
+
+    &.is-active {
+      &::after,
+      &::before {
+        content: '';
+        width: calc(var(--button-size) / 9);
+        height: calc(var(--button-size) / 3);
+        background-color: var(--text);
+        border-radius: var(--border-radius-xxxs);
+
+        @include abs-center;
+      }
+
+      @include hover {
+        &::after,
+        &::before {
+          background-color: var(--text-muted);
+        }
+      }
+
+      &::after {
+        transform: translateX(5px);
+      }
+
+      &::before {
+        transform: translateX(-5px);
+      }
+    }
+
+    &--large {
+      --button-size: 56px;
+
+      background-color: var(--primary-light);
+
+      @include hover {
+        background-color: var(--primary);
+      }
+    }
+  }
+
+  &--nav {
+    --button-size: 56px;
+
+    position: relative;
+    padding: 0;
+    color: var(--text);
+    background-color: transparent;
+    border: none;
+    border-radius: 50%;
+    box-shadow: none;
+    cursor: pointer;
+    transition-duration: var(--transition-duration);
+
+    @include square(var(--button-size));
+
+    @include hover {
+      color: var(--text-muted);
+      background-color: transparent;
+      box-shadow: none;
+    }
+
+    &:active {
+      transform: translateY(2px);
+    }
+
+    &::after,
+    &::before {
+      content: '▲';
+      font-size: calc(var(--button-size) / 2);
+
+      @include abs-center;
+    }
+
+    &--prev {
+      &::after {
+        transform: rotate(-90deg) translateY(-20%) scale(0.88);
+      }
+
+      &::before {
+        transform: rotate(-90deg) translateY(5%);
+      }
+    }
+
+    &--next {
+      &::after {
+        transform: rotate(90deg) translateY(-20%) scale(0.88);
+      }
+
+      &::before {
+        transform: rotate(90deg) translateY(5%);
+      }
+    }
+  }
+
+  &--download {
+    --button-height: 36px;
+
+    position: relative;
+    height: auto;
+    min-height: var(--button-height);
+    padding: 8px 40px 8px 16px;
+    font-weight: 500;
+    color: var(--text);
+    background-color: var(--bg-dark);
+    border: none;
+    border-radius: var(--border-radius-m);
+    box-shadow: var(--shadow-m);
+    cursor: pointer;
+    transition-duration: var(--transition-duration);
+
+    @include hover {
+      color: var(--text-muted);
+      background-color: var(--bg-light);
+      box-shadow: var(--shadow-l);
+    }
+
+    &:active {
+      transform: translateY(2px);
+    }
+
+    &::after {
+      content: '';
+      background-color: currentColor;
+      transform: translateX(10px);
+      mask: url('/download-button.svg') center/cover no-repeat;
+
+      @include abs-y;
+      @include square(17px);
+    }
+  }
+}

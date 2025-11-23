@@ -1,0 +1,126 @@
+@use '../helpers' as *;
+
+.alert {
+  position: fixed;
+  z-index: 1000;
+  right: 24px;
+  bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-width: 300px;
+  max-width: 400px;
+  padding: 16px 20px;
+  background-color: var(--bg-light);
+  border: var(--border);
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  visibility: hidden;
+  opacity: 0;
+  transition: all var(--transition-duration) ease-in-out;
+  transform: translateX(calc(100% + 24px));
+
+  @include mobile {
+    right: 16px;
+    bottom: 16px;
+    left: 16px;
+    min-width: auto;
+    max-width: none;
+    transform: translateY(100%);
+  }
+
+  &.is-visible {
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(0);
+
+    @include mobile {
+      transform: translateY(0);
+    }
+  }
+
+  &--success {
+    border-color: var(--success);
+  }
+
+  &--error {
+    border-color: var(--danger);
+  }
+
+  &--info {
+    border-color: var(--info);
+  }
+
+  &--warning {
+    border-color: var(--warning);
+  }
+}
+
+.alert__content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.alert__icon {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .alert--success & {
+    color: var(--success);
+  }
+
+  .alert--error & {
+    color: var(--danger);
+  }
+
+  .alert--info & {
+    color: var(--info);
+  }
+
+  .alert--warning & {
+    color: var(--warning);
+  }
+}
+
+.alert__message {
+  @include fluid-text(16, 14);
+
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--text);
+  word-break: break-word;
+}
+
+.alert__close {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  color: var(--text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color var(--transition-duration);
+
+  @include focus-visible-no-typing;
+
+  @include hover {
+    color: var(--text);
+  }
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+}

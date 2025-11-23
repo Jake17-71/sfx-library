@@ -1,0 +1,71 @@
+@use '../helpers' as *;
+
+.sound {
+  --image-size: 90px;
+
+  display: grid;
+  grid-template-rows: auto auto;
+  grid-template-columns: var(--image-size) auto 1fr auto;
+  grid-template-areas:
+    'image play-button title download-button'
+    'image duration waveform waveform'
+;
+  align-items: center;
+  gap: 6px 12px;
+  width: 100%;
+  padding: 12px;
+  background-color: var(--primary);
+  border-radius: var(--border-radius-m);
+  box-shadow: var(--shadow-l);
+
+  &__image-wrapper {
+    grid-area: image;
+    overflow: hidden;
+    border-radius: var(--border-radius-s);
+
+    @include square(var(--image-size));
+  }
+
+  &__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &__play-button {
+    grid-area: play-button;
+    justify-self: center;
+  }
+
+  &__title {
+    grid-area: title;
+    overflow: hidden;
+    font-weight: 700;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: var(--text);
+  }
+
+  &__download-button {
+    grid-area: download-button;
+    justify-self: end;
+  }
+
+  &__duration {
+    grid-area: duration;
+    font-weight: 500;
+  }
+
+  &__waveform-wrapper {
+    grid-area: waveform;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: var(--input-height);
+    padding: 8px;
+    background-color: var(--success);
+    border-radius: var(--border-radius-s);
+  }
+}

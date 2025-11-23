@@ -1,0 +1,36 @@
+@use '../helpers' as *;
+
+.list {
+  flex: 1;
+  overflow: hidden auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 0;
+  padding-inline: 15px 10px;
+  scroll-behavior: smooth;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+    background-color: transparent;
+    transform: translateX(-10px);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--text-muted);
+    border-radius: var(--border-radius-l);
+    transform: translateX(-10px);
+  }
+
+  &--sounds {
+    overflow-y: auto;
+    padding-inline: 25px 20px;
+  }
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 8px;
+  }
+}
