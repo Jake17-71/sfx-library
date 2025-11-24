@@ -22,6 +22,11 @@ main {
   width: 100vw;
   height: 100vh;
   padding-block: 24px;
+  
+  @include tablet-l {
+    position: relative;
+    gap: 0;
+  }
 }
 
 h1,

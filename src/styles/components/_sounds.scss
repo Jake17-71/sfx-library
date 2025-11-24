@@ -8,4 +8,8 @@
   padding-bottom: 20px;
   background-color: var(--bg);
   border-radius: var(--border-radius-l);
+
+  @include tablet-l {
+    width: 100%;
+  }
 }

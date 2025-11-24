@@ -18,6 +18,14 @@
   border-radius: var(--border-radius-m);
   box-shadow: var(--shadow-l);
 
+  @include mobile-s {
+    grid-template-columns: var(--image-size) auto auto auto;
+    grid-template-areas:
+      'image title title duration'
+      'image play-button download-button download-button'
+    ;
+  }
+
   &__image-wrapper {
     grid-area: image;
     overflow: hidden;
@@ -44,6 +52,10 @@
     white-space: nowrap;
     text-overflow: ellipsis;
     color: var(--text);
+
+    @include mobile-s {
+      @include fluid-text(26, 22);
+    }
   }
 
   &__download-button {
@@ -54,6 +66,12 @@
   &__duration {
     grid-area: duration;
     font-weight: 500;
+
+    @include mobile-s {
+      text-align: end;
+
+      @include fluid-text(20, 18);
+    }
   }
 
   &__waveform-wrapper {
@@ -67,5 +85,9 @@
     padding: 8px;
     background-color: var(--success);
     border-radius: var(--border-radius-s);
+
+    @include mobile-s {
+      display: none;
+    }
   }
 }

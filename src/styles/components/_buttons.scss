@@ -5,7 +5,6 @@
   color: var(--text);
   background-color: transparent;
   border: none;
-  cursor: pointer;
   transition-duration: var(--transition-duration);
 
   &:active {
@@ -32,6 +31,10 @@
 
   &--play {
     --button-size: 48px;
+
+    @include tablet {
+      --button-size: 40px;
+    }
 
     position: relative;
     padding: 0;
@@ -94,6 +97,10 @@
     &--large {
       --button-size: 56px;
 
+      @include tablet {
+        --button-size: 48px;
+      }
+
       background-color: var(--primary-light);
 
       @include hover {
@@ -104,6 +111,10 @@
 
   &--nav {
     --button-size: 56px;
+
+    @include tablet {
+      --button-size: 48px;
+    }
 
     position: relative;
     padding: 0;
@@ -159,6 +170,16 @@
   &--download {
     --button-height: 36px;
 
+    @include tablet {
+      --button-height: 24px;
+    }
+
+    @include mobile-s {
+      --button-height: 26px;
+
+      padding: 6px 40px 6px 10px;
+    }
+
     position: relative;
     height: auto;
     min-height: var(--button-height);
@@ -190,6 +211,103 @@
 
       @include abs-y;
       @include square(17px);
+    }
+  }
+
+  &--burger {
+    --button-size: 48px;
+
+    position: absolute;
+    z-index: 3;
+    top: 14px;
+    left: 14px;
+    font-size: calc(var(--button-size) / 1.5);
+    color: var(--text);
+    background-color: var(--primary);
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: all var(--transition-duration);
+
+    @include tablet-l-above {
+      display: none;
+    }
+
+    @include square(var(--button-size));
+
+    span,
+    &::after,
+    &::before {
+      @include abs-center;
+
+      content: '';
+      width: calc(var(--button-size) / 2);
+      height: 3px;
+      background-color: var(--text);
+      border-radius: var(--border-radius-xxxs);
+      transition: all var(--transition-duration);
+    }
+
+    &::after {
+      transform: translateY(10px);
+    }
+
+    &::before {
+      transform: translateY(-10px);
+    }
+
+    @include hover {
+      background-color: var(--primary-dark);
+    }
+
+    @include tablet-l {
+      &.is-active {
+        background-color: var(--bg);
+
+        @include hover {
+          background-color: var(--bg-light);
+        }
+      }
+    }
+
+    @include tablet {
+      &.is-active {
+        top: 8px;
+        left: calc(50% - 60px);
+      }
+    }
+
+    @include mobile-s {
+      --button-size: 36px;
+
+      top: 16px;
+      left: 16px;
+
+      &::after {
+        transform: translateY(8px);
+      }
+
+      &::before {
+        transform: translateY(-8px);
+      }
+
+      &.is-active {
+        left: calc(80% - 48px);
+      }
+    }
+
+    &.is-active {
+      span {
+        opacity: 0;
+        transform: scale(0);
+      }
+
+      &::before {
+        transform: rotate(45deg);
+      }
+
+      &::after {
+        transform: rotate(-45deg);
+      }
     }
   }
 }

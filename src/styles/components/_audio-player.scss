@@ -73,6 +73,14 @@
     gap: 12px;
     width: 100%;
     padding: 16px;
+
+    @include tablet {
+      padding-top: 36px;
+    }
+
+    @include tablet-l {
+      padding-top: 44px;
+    }
   }
 
   &__time {

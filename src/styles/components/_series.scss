@@ -10,10 +10,37 @@
   background-color: var(--bg);
   border-radius: var(--border-radius-l);
 
+  @include tablet-l {
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    box-shadow: var(--shadow-l);
+    transition: transform var(--transition-duration);
+    transform: translateX(-150%);
+
+    &.is-active {
+      width: 50%;
+      transform: translateX(0);
+
+      @include mobile-s {
+        width: 80%;
+      }
+    }
+  }
+
   &__header-wrapper {
     padding: 12px;
     background-color: var(--primary);
     border-radius: var(--border-radius-l);
+
+    @include tablet-l {
+      padding-right: 72px;
+    }
+
+    @include mobile-s {
+      padding-right: 60px;
+    }
   }
 
   &__item {
