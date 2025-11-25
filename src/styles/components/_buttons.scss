@@ -27,6 +27,10 @@
     &:active {
       transform: translateY(2px);
     }
+
+    &.is-active {
+      color: var(--primary-dark);
+    }
   }
 
   &--play {

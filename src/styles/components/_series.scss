@@ -51,7 +51,7 @@
       font-weight: 600;
       color: var(--text);
       cursor: pointer;
-      transition: color var(--transition-duration);
+      transition: color var(--transition-duration), transform var(--transition-duration);
 
       @include hover {
         color: var(--primary-light);
@@ -63,6 +63,10 @@
         transform: translateX(-18px);
 
         @include abs-y;
+      }
+
+      &:active {
+        transform: translateY(2px);
       }
 
       &.is-active {
