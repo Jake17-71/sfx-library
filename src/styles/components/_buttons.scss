@@ -19,6 +19,7 @@
     border: none;
     cursor: pointer;
     transition-duration: var(--transition-duration);
+    text-align: start;
 
     @include hover {
       color: var(--primary-dark);
