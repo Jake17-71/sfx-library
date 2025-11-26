@@ -4,6 +4,7 @@ import {
   seriesCreationSelectors,
   seriesCreationStateSelectors,
 } from '@/types/seriesCreationTypes.ts'
+import Cards from '@/modules/Cards.ts'
 
 class SeriesCreation {
   private readonly stateClasses: seriesCreationStateSelectors = {
@@ -21,11 +22,13 @@ private readonly selectors: seriesCreationSelectors = {
   private readonly config: SoundLibraryConfig
   private seriesList: HTMLUListElement
   private allSeriesButtons: HTMLButtonElement[]
+  private cards: Cards
 
-  constructor() {
+  constructor(cards: Cards) {
     this.config = soundLibraryConfig
     this.seriesList = document.querySelector(this.selectors.seriesList) as HTMLUListElement
     this.allSeriesButtons = []
+    this.cards = cards
 
     this.createAllFranchises(this.config)
   }
@@ -91,16 +94,12 @@ private readonly selectors: seriesCreationSelectors = {
     button.addEventListener('click', () => {
       const seriesId = button.dataset.jsId as string
 
-      this.displaySoundsForSeries(seriesId)
+      this.cards.displaySoundsForSeries(seriesId)
 
       this.allSeriesButtons.forEach(btn => btn.classList.remove(this.stateClasses.isActive))
 
       button.classList.add(this.stateClasses.isActive)
     })
-  }
-
-  displaySoundsForSeries(seriesId: string): void {
-    console.log('Displaying sounds for series:', seriesId)
   }
 }
 

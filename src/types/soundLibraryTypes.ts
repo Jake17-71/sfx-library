@@ -14,6 +14,7 @@ export interface GameSeries {
   id: string
   name: string // Full series name (e.g., "Assassin's Creed", "Assassin's Creed II")
   folderName: string // Folder name in public (e.g., "AC1", "AC2")
+  image?: string // Path to series cover/icon (e.g., "/audio-player-image.png")
   sounds: SoundItem[] // Array of sounds for this series
 }
 

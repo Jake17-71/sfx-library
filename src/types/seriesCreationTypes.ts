@@ -1,4 +1,4 @@
-// BurgerButton state classes
+// Series creation state selectors
 export interface seriesCreationStateSelectors {
   liItem: string
   seriesItemTitle: string
@@ -7,7 +7,7 @@ export interface seriesCreationStateSelectors {
   isActive: string
 }
 
-//
+// Series creation selectors
 export interface seriesCreationSelectors {
   seriesList: string
 }

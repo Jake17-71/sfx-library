@@ -9,7 +9,10 @@ const createSoundItem = (
   // Remove .mp3 extension for display name
   const name = fileName.replace('.mp3', '')
   // Generate unique ID
-  const id = `${gameFolder.toLowerCase()}-${fileName.toLowerCase().replace(/[^a-z0-9]/g, '-')}`
+  const id = `${gameFolder.toLowerCase()}-${fileName
+    .replace('.mp3', '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, '-')}`
 
   return {
     id,
@@ -88,18 +91,21 @@ const assassinsCreedSeries: GameSeries[] = [
     id: 'ac1',
     name: "Assassin's Creed",
     folderName: 'AC1',
+    image: "/assassin's creed.png",
     sounds: ac1Sounds,
   },
   {
     id: 'ac2',
     name: "Assassin's Creed II",
     folderName: 'AC2',
+    image: "/assassin's creed.png",
     sounds: ac2Sounds,
   },
   {
     id: 'ac-brotherhood',
     name: "Assassin's Creed: Brotherhood",
     folderName: 'AC_Brotherhood',
+    image: "/assassin's creed.png",
     sounds: acBrotherhoodSounds,
   },
 ]
@@ -203,27 +209,31 @@ const games: Game[] = [
   {
     id: 'assassins-creed',
     name: "Assassin's Creed",
-    image: "/assassin's creed.png",
+    image: "/audio-player-image.png",
     series: assassinsCreedSeries,
   },
   {
     id: 'borderlands',
     name: 'Borderlands',
+    image: "/audio-player-image.png",
     series: borderlandsSeries,
   },
   {
     id: 'death-stranding',
     name: 'Death Stranding',
+    image: "/audio-player-image.png",
     series: deathStrandingSeries,
   },
   {
     id: 'mafia',
     name: 'Mafia',
+    image: "/audio-player-image.png",
     series: mafiaSeries,
   },
   {
     id: 'watch-dogs',
     name: 'Watch Dogs',
+    image: "/audio-player-image.png",
     series: watchDogsSeries,
   },
 ]
