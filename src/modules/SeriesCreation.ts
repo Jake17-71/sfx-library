@@ -31,6 +31,19 @@ private readonly selectors: seriesCreationSelectors = {
     this.cards = cards
 
     this.createAllFranchises(this.config)
+    this.setIsActive()
+  }
+
+  setIsActive(): void {
+    const firstTitle = document.querySelector(`.${this.stateClasses.seriesItemTitle}`) as HTMLHeadingElement
+    if (firstTitle) {
+      firstTitle.click()
+    }
+
+    const firstButton = this.allSeriesButtons[0]
+    if (firstButton) {
+      firstButton.click()
+    }
   }
 
   createAllFranchises(config: SoundLibraryConfig): void {

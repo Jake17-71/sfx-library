@@ -1,6 +1,7 @@
 import { cardsSelectors, cardsStateSelectors } from '@/types/cardsTypes.ts'
 import { getSoundsBySeries, getSeriesById } from '@/modules/soundLibraryConfig.ts'
-import { GameSeries, SoundItem } from '@/types'
+import { GameSeries, Message, SoundItem } from '@/types'
+import AlertCollection from '@/modules/Alert.ts'
 
 class Cards {
   private readonly stateClasses: cardsStateSelectors = {
@@ -21,11 +22,21 @@ class Cards {
   }
 
   private soundsList: HTMLUListElement
+  private readonly alert: AlertCollection
 
   constructor() {
     this.soundsList = document.querySelector(
       this.selectors.soundsList
     ) as HTMLUListElement
+    this.alert = new AlertCollection()
+  }
+
+  addEmptyMessage(): void {
+    const emptyMessage = document.createElement('li')
+    emptyMessage.classList.add('empty-message')
+    emptyMessage.innerHTML ='В данной серии игр пока что нет sfx-эффектов :('
+
+    this.soundsList.appendChild(emptyMessage)
   }
 
   formatDuration(seconds: number): string {
@@ -39,6 +50,10 @@ class Cards {
 
     const sounds: SoundItem[] = getSoundsBySeries(seriesId)
     const series: GameSeries = getSeriesById(seriesId) as GameSeries
+
+    if (sounds.length === 0) {
+      this.addEmptyMessage()
+    }
 
     sounds.forEach((sound: SoundItem) => {
       const liElement = this.createSoundLiElement()
@@ -106,7 +121,7 @@ class Cards {
   createImage(name: string, seriesImage?: string): HTMLImageElement {
     const image = document.createElement('img')
     image.className = this.stateClasses.soundImage
-    image.src = '/sfx-library' + (seriesImage || "audio-player-image.png")
+    image.src = '/sfx-library' + (seriesImage || 'audio-player-image.png')
     image.alt = name
     image.width = 90
     image.height = 90
@@ -129,6 +144,7 @@ class Cards {
     const title = document.createElement('h5')
     title.classList.add(this.stateClasses.soundTitle, 'h4')
     title.textContent = name
+    title.title = name
 
     return title
   }
@@ -166,15 +182,24 @@ class Cards {
   downloadSound(sound: SoundItem): void {
     const { audioPath, fileName } = sound
 
-   const path = `/sfx-library${audioPath}`
+    const path = `/sfx-library${audioPath}`
 
-    const  link = document.createElement('a')
-    link.href = path
-    link.download = fileName
+    try {
+      const link = document.createElement('a')
+      link.href = path
+      link.download = fileName
 
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+
+    } catch (error) {
+      const message: Message =
+        error instanceof Error
+          ? error.message
+          : 'Произошла неизвестная ошибка. Попробуйте еще раз.'
+      this.alert.showError(message)
+    }
   }
 }
 
