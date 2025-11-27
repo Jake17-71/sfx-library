@@ -2,6 +2,7 @@ import { cardsSelectors, cardsStateSelectors } from '@/types/cardsTypes.ts'
 import { getSoundsBySeries, getSeriesById } from '@/modules/soundLibraryConfig.ts'
 import { GameSeries, Message, SoundItem } from '@/types'
 import AlertCollection from '@/modules/Alert.ts'
+import WaveformManager from '@/modules/WaveformManager.ts'
 
 class Cards {
   private readonly stateClasses: cardsStateSelectors = {
@@ -23,12 +24,14 @@ class Cards {
 
   private soundsList: HTMLUListElement
   private readonly alert: AlertCollection
+  private readonly waveformManager: WaveformManager
 
   constructor() {
     this.soundsList = document.querySelector(
       this.selectors.soundsList
     ) as HTMLUListElement
     this.alert = new AlertCollection()
+    this.waveformManager = new WaveformManager()
   }
 
   addEmptyMessage(): void {
@@ -46,6 +49,8 @@ class Cards {
   }
 
   displaySoundsForSeries(seriesId: string): void {
+    this.waveformManager.destroyAll()
+
     this.soundsList.innerHTML = ''
 
     const sounds: SoundItem[] = getSoundsBySeries(seriesId)
@@ -73,7 +78,7 @@ class Cards {
   }
 
   createSoundCard(sound: SoundItem, seriesImage?: string): HTMLDivElement {
-    const { id, name, duration } = sound
+    const { id, name, audioPath, duration } = sound
 
     const soundDiv = this.createSoundDiv(id)
 
@@ -91,7 +96,7 @@ class Cards {
 
     const durationElement = this.createDuration(duration)
 
-    const waveformWrapper = this.createWaveformWrapper()
+    const waveformWrapper = this.createWaveformWrapper(id, audioPath)
 
     soundDiv.appendChild(imageWrapper)
     soundDiv.appendChild(buttonPlay)
@@ -168,15 +173,58 @@ class Cards {
     return durationElement
   }
 
-  createWaveformWrapper(): HTMLDivElement {
+  createWaveformWrapper(soundId: string, audioPath: string): HTMLDivElement {
     const waveformWrapper = document.createElement('div')
     waveformWrapper.className = this.stateClasses.soundWaveformWrapper
+    waveformWrapper.id = `waveform-${soundId}`
+
+    this.waveformManager.createWaveform({
+      soundId,
+      audioPath,
+      containerId: `waveform-${soundId}`,
+      callbacks: {
+        onPlay: (id) => this.onWaveSurferPlay(id),
+        onPause: (id) => this.onWaveSurferPause(id),
+        onFinish: (id) => this.onWaveSurferFinish(id),
+      },
+    })
 
     return waveformWrapper
   }
 
   playSound(sound: SoundItem, buttonPlay: HTMLButtonElement): void {
-    console.log('play sound', sound, 'buttonPlay', buttonPlay)
+    this.waveformManager.setVolume(sound.id, 0.65)
+    this.waveformManager.playPause(sound.id)
+
+    if (this.waveformManager.isPlaying(sound.id)) {
+      buttonPlay.classList.add(this.stateClasses.isActive)
+    } else {
+      buttonPlay.classList.remove(this.stateClasses.isActive)
+    }
+  }
+
+  onWaveSurferPlay(soundId: string): void {
+    const buttonPlay = document.querySelector(`[data-js-sound-id="${soundId}"].${this.stateClasses.soundPlayButton}`) as HTMLButtonElement
+
+    if (buttonPlay) {
+      buttonPlay.classList.add(this.stateClasses.isActive)
+    }
+  }
+
+  onWaveSurferPause(soundId: string): void {
+    const buttonPlay = document.querySelector(`[data-js-sound-id="${soundId}"].${this.stateClasses.soundPlayButton}`) as HTMLButtonElement
+
+    if (buttonPlay) {
+      buttonPlay.classList.remove(this.stateClasses.isActive)
+    }
+  }
+
+  onWaveSurferFinish(soundId: string): void {
+    const buttonPlay = document.querySelector(`[data-js-sound-id="${soundId}"].${this.stateClasses.soundPlayButton}`) as HTMLButtonElement
+
+    if (buttonPlay) {
+      buttonPlay.classList.remove(this.stateClasses.isActive)
+    }
   }
 
   downloadSound(sound: SoundItem): void {

@@ -85,8 +85,11 @@
     align-items: center;
     height: var(--input-height);
     padding: 8px;
-    background-color: var(--success);
     border-radius: var(--border-radius-s);
+
+    > div {
+      width: 100%;
+    }
 
     @include mobile-s {
       display: none;

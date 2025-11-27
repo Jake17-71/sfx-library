@@ -46,5 +46,8 @@
     ">0.5%",
     "last 2 versions",
     "not dead"
-  ]
+  ],
+  "dependencies": {
+    "wavesurfer.js": "^7.0.0-beta.13"
+  }
 }
