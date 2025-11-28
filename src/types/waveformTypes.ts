@@ -18,5 +18,6 @@ export interface WaveformOptions {
     onPause?: (soundId: string) => void
     onFinish?: (soundId: string) => void
     onReady?: (soundId: string) => void
+    onTimeUpdate?: (soundId: string, currentTime: number) => void
   }
 }

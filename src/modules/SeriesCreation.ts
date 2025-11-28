@@ -5,6 +5,7 @@ import {
   seriesCreationStateSelectors,
 } from '@/types/seriesCreationTypes.ts'
 import Cards from '@/modules/Cards.ts'
+import Player from '@/modules/Player.ts'
 
 class SeriesCreation {
   private readonly stateClasses: seriesCreationStateSelectors = {
@@ -13,22 +14,24 @@ class SeriesCreation {
     seriesItemButtons: `series__item-buttons`,
     seriesItemButton: `series__item-button`,
     isActive: `is-active`,
-}
+  }
 
-private readonly selectors: seriesCreationSelectors = {
-    seriesList: `[data-js-series-list]`,
-}
+  private readonly selectors: seriesCreationSelectors = {
+      seriesList: `[data-js-series-list]`,
+  }
 
   private readonly config: SoundLibraryConfig
   private seriesList: HTMLUListElement
   private allSeriesButtons: HTMLButtonElement[]
   private cards: Cards
+  private player: Player
 
-  constructor(cards: Cards) {
+  constructor(cards: Cards, player: Player) {
     this.config = soundLibraryConfig
     this.seriesList = document.querySelector(this.selectors.seriesList) as HTMLUListElement
     this.allSeriesButtons = []
     this.cards = cards
+    this.player = player
 
     this.createAllFranchises(this.config)
     this.setIsActive()
@@ -108,6 +111,9 @@ private readonly selectors: seriesCreationSelectors = {
       const seriesId = button.dataset.jsId as string
 
       this.cards.displaySoundsForSeries(seriesId)
+      this.player.updatePlayerImage(seriesId)
+      this.player.updateGameTitle(seriesId)
+      this.player.updateSoundInfo(seriesId)
 
       this.allSeriesButtons.forEach(btn => btn.classList.remove(this.stateClasses.isActive))
 

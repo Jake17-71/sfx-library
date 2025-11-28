@@ -3,6 +3,8 @@ import { getSoundsBySeries, getSeriesById } from '@/modules/soundLibraryConfig.t
 import { GameSeries, Message, SoundItem } from '@/types'
 import AlertCollection from '@/modules/Alert.ts'
 import WaveformManager from '@/modules/WaveformManager.ts'
+import { formatDuration } from '@/utils/formatDuration.ts'
+import Player from '@/modules/Player.ts'
 
 class Cards {
   private readonly stateClasses: cardsStateSelectors = {
@@ -25,6 +27,8 @@ class Cards {
   private soundsList: HTMLUListElement
   private readonly alert: AlertCollection
   private readonly waveformManager: WaveformManager
+  private player: Player | null = null
+  private currentSounds: Map<string, SoundItem> = new Map()
 
   constructor() {
     this.soundsList = document.querySelector(
@@ -32,6 +36,14 @@ class Cards {
     ) as HTMLUListElement
     this.alert = new AlertCollection()
     this.waveformManager = new WaveformManager()
+  }
+
+  setPlayer(player: Player): void {
+    this.player = player
+  }
+
+  getWaveformManager(): WaveformManager {
+    return this.waveformManager
   }
 
   addEmptyMessage(): void {
@@ -42,25 +54,30 @@ class Cards {
     this.soundsList.appendChild(emptyMessage)
   }
 
-  formatDuration(seconds: number): string {
-    const mins = Math.floor(seconds / 60)
-    const secs = Math.floor(seconds % 60)
-    return `${mins}:${secs.toString().padStart(2, '0')}`
-  }
-
   displaySoundsForSeries(seriesId: string): void {
     this.waveformManager.destroyAll()
 
     this.soundsList.innerHTML = ''
+    this.currentSounds.clear()
+
+    if (this.player) {
+      this.player.updatePlayButtonState(false)
+    }
 
     const sounds: SoundItem[] = getSoundsBySeries(seriesId)
     const series: GameSeries = getSeriesById(seriesId) as GameSeries
 
     if (sounds.length === 0) {
       this.addEmptyMessage()
+      if (this.player) {
+        this.player.resetPlayerState()
+      }
+      return
     }
 
     sounds.forEach((sound: SoundItem) => {
+      this.currentSounds.set(sound.id, sound)
+
       const liElement = this.createSoundLiElement()
 
       const soundElement = this.createSoundCard(sound, series.image)
@@ -168,7 +185,7 @@ class Cards {
   createDuration(duration: number): HTMLParagraphElement {
     const durationElement = document.createElement('p')
     durationElement.className = this.stateClasses.soundDuration
-    durationElement.textContent = this.formatDuration(duration)
+    durationElement.textContent = formatDuration(duration)
 
     return durationElement
   }
@@ -186,6 +203,7 @@ class Cards {
         onPlay: (id) => this.onWaveSurferPlay(id),
         onPause: (id) => this.onWaveSurferPause(id),
         onFinish: (id) => this.onWaveSurferFinish(id),
+        onTimeUpdate: (id, currentTime) => this.onWaveSurferTimeUpdate(id, currentTime),
       },
     })
 
@@ -209,6 +227,12 @@ class Cards {
     if (buttonPlay) {
       buttonPlay.classList.add(this.stateClasses.isActive)
     }
+
+    if (this.player) {
+      const soundInfo = this.currentSounds.get(soundId)
+      this.player.setCurrentSound(soundId, soundInfo)
+      this.player.updatePlayButtonState(true)
+    }
   }
 
   onWaveSurferPause(soundId: string): void {
@@ -217,6 +241,11 @@ class Cards {
     if (buttonPlay) {
       buttonPlay.classList.remove(this.stateClasses.isActive)
     }
+
+    if (this.player) {
+      this.player.setCurrentSound(soundId)
+      this.player.updatePlayButtonState(false)
+    }
   }
 
   onWaveSurferFinish(soundId: string): void {
@@ -224,6 +253,20 @@ class Cards {
 
     if (buttonPlay) {
       buttonPlay.classList.remove(this.stateClasses.isActive)
+    }
+
+    if (this.player) {
+      const duration = this.waveformManager.getDuration(soundId)
+      if (duration > 0) {
+        this.player.updateProgress(duration)
+      }
+      this.player.updatePlayButtonState(false)
+    }
+  }
+
+  onWaveSurferTimeUpdate(soundId: string, currentTime: number): void {
+    if (this.player && this.waveformManager.getCurrentPlayingId() === soundId) {
+      this.player.updateProgress(currentTime)
     }
   }
 

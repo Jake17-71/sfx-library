@@ -221,7 +221,7 @@ const games: Game[] = [
   {
     id: 'death-stranding',
     name: 'Death Stranding',
-    image: "/audio-player-image.png",
+    image: "/DS.jpeg",
     series: deathStrandingSeries,
   },
   {
@@ -243,11 +243,6 @@ export const soundLibraryConfig: SoundLibraryConfig = {
   games,
 }
 
-// Helper function to get all sounds as flat array
-export const getAllSounds = (): SoundItem[] => {
-  return games.flatMap((game) => game.series.flatMap((series) => series.sounds))
-}
-
 // Helper function to get sounds by series ID
 export const getSoundsBySeries = (seriesId: string): SoundItem[] => {
   const series = games
@@ -265,4 +260,16 @@ export const getSeriesById = (seriesId: string): GameSeries | undefined => {
 export const getSeriesByGameId = (gameId: string): GameSeries[] => {
   const game = games.find((g) => g.id === gameId)
   return game?.series || []
+}
+
+// Helper function to get franchise (Game) image by series ID
+export const getFranchiseImageBySeriesId = (seriesId: string): string => {
+  const game = games.find((g) => g.series.some((s) => s.id === seriesId))
+  return game?.image || '/audio-player-image.png'
+}
+
+// Helper function to get series name by series ID
+export const getSeriesNameById = (seriesId: string): string => {
+  const series = games.flatMap((game) => game.series).find((s) => s.id === seriesId)
+  return series?.name || ''
 }

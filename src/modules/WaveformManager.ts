@@ -59,15 +59,17 @@ class WaveformManager {
           })
         }
 
+        if (callbacks?.onTimeUpdate) {
+          wavesurfer.on('timeupdate', (currentTime: number) => {
+            callbacks.onTimeUpdate!(soundId, currentTime)
+          })
+        }
+
         this.waveSurfers.set(soundId, wavesurfer)
       } catch (error) {
         console.error(`Ошибка создания WaveSurfer для ${soundId}:`, error)
       }
     })
-  }
-
-  getWaveSurfer(soundId: string): WaveSurfer | undefined {
-    return this.waveSurfers.get(soundId)
   }
 
   getCurrentPlayingId(): string | null {
@@ -106,39 +108,16 @@ class WaveformManager {
     return wavesurfer ? wavesurfer.isPlaying() : false
   }
 
-  destroy(soundId: string): void {
-    const wavesurfer = this.waveSurfers.get(soundId)
-    if (wavesurfer) {
-      wavesurfer.destroy()
-      this.waveSurfers.delete(soundId)
-
-      if (this.currentPlayingId === soundId) {
-        this.currentPlayingId = null
-      }
-    }
-  }
-
   destroyAll(): void {
     this.waveSurfers.forEach((ws) => ws.destroy())
     this.waveSurfers.clear()
     this.currentPlayingId = null
   }
 
-  getCurrentTime(soundId: string): number {
-    const wavesurfer = this.waveSurfers.get(soundId)
-    return wavesurfer ? wavesurfer.getCurrentTime() : 0
-  }
 
   getDuration(soundId: string): number {
     const wavesurfer = this.waveSurfers.get(soundId)
     return wavesurfer ? wavesurfer.getDuration() : 0
-  }
-
-  seekTo(soundId: string, progress: number): void {
-    const wavesurfer = this.waveSurfers.get(soundId)
-    if (wavesurfer) {
-      wavesurfer.seekTo(progress)
-    }
   }
 }
 
