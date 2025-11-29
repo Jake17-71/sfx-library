@@ -20,7 +20,7 @@
 
   @include mobile-s {
     --image-size: 64px;
-    grid-template-columns: var(--image-size) auto auto auto;
+    grid-template-columns: var(--image-size) auto 1fr auto;
     grid-template-areas:
       'image title title duration'
       'image play-button download-button download-button'
