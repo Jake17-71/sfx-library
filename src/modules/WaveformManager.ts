@@ -119,6 +119,16 @@ class WaveformManager {
     const wavesurfer = this.waveSurfers.get(soundId)
     return wavesurfer ? wavesurfer.getDuration() : 0
   }
+
+  seekTo(soundId: string, timeInSeconds: number): void {
+    const wavesurfer = this.waveSurfers.get(soundId)
+    if (!wavesurfer) {return}
+
+    const duration = wavesurfer.getDuration()
+    if (duration > 0) {
+      wavesurfer.setTime(timeInSeconds)
+    }
+  }
 }
 
 export default WaveformManager

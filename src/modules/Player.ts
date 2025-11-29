@@ -3,6 +3,7 @@ import { getFranchiseImageBySeriesId, getSeriesNameById, getSoundsBySeries } fro
 import { formatDuration } from '@/utils/formatDuration.ts'
 import WaveformManager from '@/modules/WaveformManager.ts'
 import { SoundItem } from '@/types'
+import Cards from '@/modules/Cards.ts'
 
 class Player {
 
@@ -31,6 +32,7 @@ class Player {
   private progressFill: HTMLDivElement
   private waveformManager: WaveformManager | null = null
   private currentSoundId: string | null = null
+  private cards: Cards | null = null
 
   constructor(waveformManager?: WaveformManager) {
     this.playerImage = document.querySelector(this.selectors.playerImage) as HTMLImageElement
@@ -49,6 +51,10 @@ class Player {
     }
 
     this.bindEventControlButtons()
+  }
+
+  setCards(cards: Cards): void {
+    this.cards = cards
   }
 
   updatePlayerImage(seriesId: string): void {
@@ -91,12 +97,27 @@ class Player {
     })
 
     this.buttonPrev.addEventListener('click', () => {
-
+      this.playPrev()
     })
 
     this.buttonNext.addEventListener('click', () => {
-
+      this.playNext()
     })
+
+    this.progressInput.addEventListener('input', () => {
+      this.handleProgressChange()
+    })
+  }
+
+  // Handle progress input change to seek audio
+  handleProgressChange(): void {
+    if (!this.currentSoundId || !this.waveformManager) {
+      return
+    }
+
+    const seekTime = parseFloat(this.progressInput.value)
+    this.updateProgress(seekTime)
+    this.waveformManager.seekTo(this.currentSoundId, seekTime)
   }
 
   updatePlayButtonState(isPlaying: boolean): void {
@@ -153,6 +174,46 @@ class Player {
 
     const duration = this.waveformManager.getDuration(sound.id)
     this.updateDurationAndProgress(duration > 0 ? duration : sound.duration)
+  }
+
+  // Play next sound with cyclic navigation
+  playNext(): void {
+    if (!this.cards || !this.waveformManager) {
+      return
+    }
+
+    const sounds = this.cards.getCurrentSounds()
+    if (sounds.length === 0) {
+      return
+    }
+
+    const currentIndex = sounds.findIndex(sound => sound.id === this.currentSoundId)
+    const nextIndex = (currentIndex + 1) % sounds.length
+    const nextSound = sounds[nextIndex]
+
+    if (nextSound) {
+      this.waveformManager.playPause(nextSound.id)
+    }
+  }
+
+  // Play previous sound with cyclic navigation
+  playPrev(): void {
+    if (!this.cards || !this.waveformManager) {
+      return
+    }
+
+    const sounds = this.cards.getCurrentSounds()
+    if (sounds.length === 0) {
+      return
+    }
+
+    const currentIndex = sounds.findIndex(sound => sound.id === this.currentSoundId)
+    const prevIndex = currentIndex <= 0 ? sounds.length - 1 : currentIndex - 1
+    const prevSound = sounds[prevIndex]
+
+    if (prevSound) {
+      this.waveformManager.playPause(prevSound.id)
+    }
   }
 }
 

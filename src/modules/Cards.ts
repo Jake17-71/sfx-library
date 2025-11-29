@@ -46,6 +46,10 @@ class Cards {
     return this.waveformManager
   }
 
+  getCurrentSounds(): SoundItem[] {
+    return Array.from(this.currentSounds.values())
+  }
+
   addEmptyMessage(): void {
     const emptyMessage = document.createElement('li')
     emptyMessage.classList.add('empty-message')
