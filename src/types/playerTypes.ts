@@ -1,7 +1,3 @@
-export interface PlayerStateSelectors {
-
-}
-
 export interface PlayerSelectors {
   playerImage: string
   gameTitle: string
@@ -13,4 +9,7 @@ export interface PlayerSelectors {
   fullTime: string
   progressInput: string
   progressFill: string
+  volumeButton: string
+  volumeInput: string
+  volumeFill: string
 }

@@ -1,9 +1,11 @@
 import WaveSurfer from 'wavesurfer.js'
 import { WaveformConfig, WaveformOptions } from '@/types/waveformTypes.ts'
+import { DEFAULT_VOLUME } from '@/constants/playerConstants.ts'
 
 class WaveformManager {
   private waveSurfers: Map<string, WaveSurfer> = new Map()
   private currentPlayingId: string | null = null
+  private currentVolume: number = DEFAULT_VOLUME
   private readonly defaultConfig: WaveformConfig = {
     waveColor: '#ddd',
     progressColor: '#4a90e2',
@@ -65,6 +67,7 @@ class WaveformManager {
           })
         }
 
+        wavesurfer.setVolume(this.currentVolume)
         this.waveSurfers.set(soundId, wavesurfer)
       } catch (error) {
         console.error(`Ошибка создания WaveSurfer для ${soundId}:`, error)
@@ -96,11 +99,11 @@ class WaveformManager {
     }
   }
 
-  setVolume(soundId: string, volume: number): void {
-    const wavesurfer = this.waveSurfers.get(soundId)
-    if (wavesurfer) {
+  setVolumeForAll(volume: number): void {
+    this.currentVolume = volume
+    this.waveSurfers.forEach((wavesurfer) => {
       wavesurfer.setVolume(volume)
-    }
+    })
   }
 
   isPlaying(soundId: string): boolean {

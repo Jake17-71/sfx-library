@@ -215,7 +215,6 @@ class Cards {
   }
 
   playSound(sound: SoundItem, buttonPlay: HTMLButtonElement): void {
-    this.waveformManager.setVolume(sound.id, 0.65)
     this.waveformManager.playPause(sound.id)
 
     if (this.waveformManager.isPlaying(sound.id)) {

@@ -34,8 +34,7 @@
       <section class="sounds">
 
         <div class="audio-player">
-
-          <div class="audio-player__image-wrapper">
+          <div class="audio-player__background">
             <img
               class="audio-player__image"
               src="/audio-player-image.png"
@@ -47,54 +46,45 @@
             />
           </div>
 
-          <div class="audio-player__content">
-            <h3
-              class="audio-player__game-title"
-              data-js-audio-player-game-title
-            >Assassin's Creed Mirage</h3>
-            <h4
-              class="audio-player__sound-title"
-              data-js-audio-player-sound-title
-            >Level Up</h4>
+          <h3
+            class="audio-player__game-title"
+            data-js-audio-player-game-title
+          >Assassin's Creed Mirage</h3>
 
-            <div class="audio-player__controls">
-              <button
-                type="button"
-                class="audio-player__control-button
-                audio-player__control-button--prev
-                button--nav
-                button--nav--prev"
-                aria-label="Previous track"
-                data-js-audio-player-button-prev
-              ></button>
+          <h4
+            class="audio-player__sound-title"
+            data-js-audio-player-sound-title
+          >Level Up</h4>
 
-              <button
-                type="button"
-                class="audio-player__control-button
-                audio-player__control-button--play
-                button--play
-                button--play--large"
-                aria-label="Play/Pause"
-                data-js-audio-player-button-play
-              ></button>
+          <div class="audio-player__controls">
+            <button
+              type="button"
+              class="audio-player__button-prev button--nav button--nav--prev"
+              aria-label="Previous track"
+              data-js-audio-player-button-prev
+            ></button>
 
-              <button
-                type="button"
-                class="audio-player__control-button
-                audio-player__control-button--next
-                button--nav
-                button--nav--next"
-                aria-label="Next track"
-                data-js-audio-player-button-next
-              ></button>
-            </div>
+            <button
+              type="button"
+              class="audio-player__button-play button--play button--play--large"
+              aria-label="Play/Pause"
+              data-js-audio-player-button-play
+            ></button>
+
+            <button
+              type="button"
+              class="audio-player__button-next button--nav button--nav--next"
+              aria-label="Next track"
+              data-js-audio-player-button-next
+            ></button>
           </div>
 
-          <div class="audio-player__progress-bar">
+          <div class="audio-player__progress">
             <span
               class="audio-player__time audio-player__time--current"
               data-js-audio-player-current-time
             >0:05</span>
+
             <div class="audio-player__progress-track">
               <div
                 class="audio-player__progress-fill"
@@ -110,12 +100,43 @@
                 data-js-audio-player-progress-input
               >
             </div>
+
             <span
               class="audio-player__time audio-player__time--duration"
               data-js-audio-player-full-time
             >0:10</span>
           </div>
 
+          <div class="audio-player__volume">
+            <button
+              type="button"
+              class="audio-player__volume-button button"
+              aria-label="Mute/Unmute"
+              data-js-audio-player-volume-button
+            >
+              <svg width="24" height="24" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                <g transform="translate(42.666667, 85.333333)">
+                  <path fill="currentColor" d="M361.299413,341.610667 L328.014293,314.98176 C402.206933,233.906133 402.206933,109.96608 328.013013,28.8906667 L361.298133,2.26304 C447.910187,98.97536 447.908907,244.898347 361.299413,341.610667 Z M276.912853,69.77216 L243.588693,96.4309333 C283.38432,138.998613 283.38304,204.87488 243.589973,247.44256 L276.914133,274.101333 C329.118507,215.880107 329.118507,127.992107 276.912853,69.77216 Z M191.749973,1.42108547e-14 L80.8957867,87.2292267 L7.10542736e-15,87.2292267 L7.10542736e-15,257.895893 L81.0208,257.895893 L191.749973,343.35424 L191.749973,1.42108547e-14 L191.749973,1.42108547e-14 Z M42.6666667,129.895893 L95.6874667,129.895893 L149.083307,87.8749867 L149.083307,256.520747 L95.5624533,215.229227 L42.6666667,215.229227 L42.6666667,129.895893 Z"/>
+                </g>
+              </svg>
+            </button>
+
+            <div class="audio-player__volume-track">
+              <div
+                class="audio-player__volume-fill"
+                data-js-audio-player-volume-fill
+              ></div>
+              <input
+                type="range"
+                class="audio-player__volume-input"
+                min="0"
+                max="100"
+                value="100"
+                aria-label="Volume"
+                data-js-audio-player-volume-input
+              >
+            </div>
+          </div>
         </div>
 
         <ul class="list list--sounds" data-js-sounds-list>

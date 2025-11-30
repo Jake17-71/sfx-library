@@ -4,6 +4,7 @@ import { formatDuration } from '@/utils/formatDuration.ts'
 import WaveformManager from '@/modules/WaveformManager.ts'
 import { SoundItem } from '@/types'
 import Cards from '@/modules/Cards.ts'
+import { SOUND_ICON, SOUND_MUTED_ICON, DEFAULT_VOLUME } from '@/constants/playerConstants.ts'
 
 class Player {
 
@@ -18,6 +19,9 @@ class Player {
     fullTime: `[data-js-audio-player-full-time]`,
     progressInput: `[data-js-audio-player-progress-input]`,
     progressFill: `[data-js-audio-player-progress-fill]`,
+    volumeButton: `[data-js-audio-player-volume-button]`,
+    volumeInput: `[data-js-audio-player-volume-input]`,
+    volumeFill: `[data-js-audio-player-volume-fill]`,
   }
 
   private playerImage: HTMLImageElement
@@ -30,9 +34,15 @@ class Player {
   private fullTime: HTMLSpanElement
   private progressInput: HTMLInputElement
   private progressFill: HTMLDivElement
+  private volumeButton: HTMLButtonElement
+  private volumeInput: HTMLInputElement
+  private volumeFill: HTMLDivElement
   private waveformManager: WaveformManager | null = null
   private currentSoundId: string | null = null
   private cards: Cards | null = null
+  private isMuted: boolean = false
+  private currentVolume: number = DEFAULT_VOLUME
+  private maxVolume: number = 100
 
   constructor(waveformManager?: WaveformManager) {
     this.playerImage = document.querySelector(this.selectors.playerImage) as HTMLImageElement
@@ -45,12 +55,20 @@ class Player {
     this.fullTime = document.querySelector(this.selectors.fullTime) as HTMLSpanElement
     this.progressInput = document.querySelector(this.selectors.progressInput) as HTMLInputElement
     this.progressFill = document.querySelector(this.selectors.progressFill) as HTMLDivElement
+    this.volumeButton = document.querySelector(this.selectors.volumeButton) as HTMLButtonElement
+    this.volumeInput = document.querySelector(this.selectors.volumeInput) as HTMLInputElement
+    this.volumeFill = document.querySelector(this.selectors.volumeFill) as HTMLDivElement
 
     if (waveformManager) {
       this.waveformManager = waveformManager
     }
 
+    this.maxVolume = parseFloat(this.volumeInput.max)
+
     this.bindEventControlButtons()
+    this.bindVolumeEvents()
+    this.updateVolumeIcon()
+    this.initializeVolume()
   }
 
   setCards(cards: Cards): void {
@@ -213,6 +231,98 @@ class Player {
 
     if (prevSound) {
       this.waveformManager.playPause(prevSound.id)
+    }
+  }
+
+  showVolumeTrack(): void {
+    this.volumeButton.classList.add('is-active')
+  }
+
+  hideVolumeTrack(): void {
+    this.volumeButton.classList.remove('is-active')
+  }
+
+  bindVolumeEvents(): void {
+    this.volumeButton.addEventListener('mouseenter', () => this.showVolumeTrack())
+    this.volumeButton.addEventListener('mouseleave', () => this.hideVolumeTrack())
+    this.volumeInput.addEventListener('mouseenter', () => this.showVolumeTrack())
+    this.volumeInput.addEventListener('mouseleave', () => this.hideVolumeTrack())
+
+    this.volumeButton.addEventListener('click', () => this.toggleMute())
+    this.volumeInput.addEventListener('input', () => this.handleVolumeChange())
+  }
+
+  toggleMute(): void {
+    this.isMuted = !this.isMuted
+    this.updateVolumeIcon()
+
+    if (this.isMuted) {
+      this.volumeInput.value = '0'
+      this.updateVolumeDisplay(0)
+      this.applyMuteToWaveform()
+    } else {
+      const restoredVolume = this.maxVolume * this.currentVolume
+      this.volumeInput.value = restoredVolume.toString()
+      this.updateVolumeDisplay(restoredVolume)
+      this.applyMuteToWaveform()
+    }
+  }
+
+  applyMuteToWaveform(): void {
+    if (!this.waveformManager) {
+      return
+    }
+
+    if (this.isMuted) {
+      this.waveformManager.setVolumeForAll(0)
+    } else {
+      this.waveformManager.setVolumeForAll(this.currentVolume)
+    }
+  }
+
+  updateVolumeIcon(): void {
+    this.volumeButton.innerHTML = this.isMuted ? SOUND_MUTED_ICON : SOUND_ICON
+  }
+
+  handleVolumeChange(): void {
+    const volume = parseFloat(this.volumeInput.value)
+    const wasMuted = this.isMuted
+
+    this.isMuted = volume === 0
+
+    if (wasMuted !== this.isMuted) {
+      this.updateVolumeIcon()
+    }
+
+    this.updateVolumeDisplay(volume)
+    this.applyVolume(volume)
+  }
+
+  updateVolumeDisplay(volume: number): void {
+    const percentage = (volume / this.maxVolume) * 100
+    this.volumeFill.style.height = `${percentage}%`
+  }
+
+  applyVolume(volume: number): void {
+    if (!this.waveformManager) {
+      return
+    }
+
+    this.currentVolume = volume / this.maxVolume
+
+    if (!this.isMuted) {
+      this.waveformManager.setVolumeForAll(this.currentVolume)
+    }
+  }
+
+  initializeVolume(): void {
+    const defaultVolume = this.maxVolume * this.currentVolume
+
+    this.volumeInput.value = defaultVolume.toString()
+    this.updateVolumeDisplay(defaultVolume)
+
+    if (this.waveformManager) {
+      this.waveformManager.setVolumeForAll(this.currentVolume)
     }
   }
 }
