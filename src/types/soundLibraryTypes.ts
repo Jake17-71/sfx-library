@@ -22,7 +22,7 @@ export interface GameSeries {
 export interface Game {
   id: string // Unique identifier (e.g., "assassins-creed")
   name: string // Game franchise name (e.g., "Assassin's Creed")
-  image?: string // Path to game cover/icon (e.g., "/assassin's creed.png")
+  image?: string // Path to game cover/icon
   series: GameSeries[]
 }
 

@@ -76,7 +76,7 @@ class Player {
   }
 
   updatePlayerImage(seriesId: string): void {
-    this.playerImage.src = '/sfx-library' + `${getFranchiseImageBySeriesId(seriesId)}`
+    this.playerImage.src = '/zvuchki' + `${getFranchiseImageBySeriesId(seriesId)}`
   }
 
   updateGameTitle(seriesId: string): void {

@@ -34,7 +34,7 @@ class WaveformManager {
           ...config,
         })
 
-        wavesurfer.load(`/sfx-library${audioPath}`)
+        wavesurfer.load(`/zvuchki${audioPath}`)
 
         if (callbacks?.onReady) {
           wavesurfer.on('ready', () => callbacks.onReady!(soundId))

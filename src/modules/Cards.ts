@@ -147,7 +147,7 @@ class Cards {
   createImage(name: string, seriesImage?: string): HTMLImageElement {
     const image = document.createElement('img')
     image.className = this.stateClasses.soundImage
-    image.src = '/sfx-library' + (seriesImage || 'audio-player-image.png')
+    image.src = '/zvuchki' + (seriesImage || 'audio-player-image.png')
     image.alt = name
     image.width = 90
     image.height = 90
@@ -276,7 +276,7 @@ class Cards {
   downloadSound(sound: SoundItem): void {
     const { audioPath, fileName } = sound
 
-    const path = `/sfx-library${audioPath}`
+    const path = `/zvuchki${audioPath}`
 
     try {
       const link = document.createElement('a')
